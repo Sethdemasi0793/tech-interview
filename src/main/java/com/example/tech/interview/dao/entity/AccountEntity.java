@@ -2,6 +2,8 @@ package com.example.tech.interview.dao.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "accounts")
 public class AccountEntity {
@@ -10,19 +12,16 @@ public class AccountEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
-    private String firstName;
+    private LocalDateTime createdDateTime;
 
-    @Column(nullable = false)
-    private String lastName;
+    private LocalDateTime updatedDateTime;
 
     @Column(nullable = false)
     private String accountType;
 
-    private Address address;
+    private Customer customer;
 
     private boolean individualAccount;
-
 
     public Long getId() {
         return id;
@@ -30,22 +29,6 @@ public class AccountEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getAccountType() {
@@ -60,19 +43,35 @@ public class AccountEntity {
             this.individualAccount = false;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     public boolean isIndividualAccount() {
         return individualAccount;
     }
 
     public void setIndividualAccount(boolean individualAccount) {
         this.individualAccount = individualAccount;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
+        this.createdDateTime = createdDateTime;
+    }
+
+    public LocalDateTime getUpdatedDateTime() {
+        return updatedDateTime;
+    }
+
+    public void setUpdatedDateTime(LocalDateTime updatedDateTime) {
+        this.updatedDateTime = updatedDateTime;
     }
 }

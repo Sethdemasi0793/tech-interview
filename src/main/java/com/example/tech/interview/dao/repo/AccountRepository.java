@@ -11,6 +11,9 @@ public interface AccountRepository extends CrudRepository<AccountEntity, Long> {
     @Query(nativeQuery = true, value = "select * from accounts where id = ?1")
     AccountEntity findByAccountId(Long accountId);
 
+    void deleteByAccountId(Long accountId);
+
+    void deleteByCustomerEmailAddress(String customerEmail);
 
 
 }

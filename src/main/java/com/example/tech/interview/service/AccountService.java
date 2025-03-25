@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,9 +63,12 @@ public class AccountService {
         Optional<AccountEntity> optional = accountRepository.findById(accountEntity.getId());
         if (optional.isPresent()) {
             AccountEntity existingAccount = optional.get();
-            existingAccount.setFirstName(accountEntity.getFirstName());
-            existingAccount.setLastName(accountEntity.getLastName());
-            existingAccount.setAddress(accountEntity.getAddress());
+            existingAccount.setCreatedDateTime(accountEntity.getCreatedDateTime());
+            existingAccount.setUpdatedDateTime(LocalDateTime.now());
+            existingAccount.getCustomer().setFirstName(accountEntity.getCustomer().getFirstName());
+            existingAccount.getCustomer().setLastName(accountEntity.getCustomer().getLastName());
+            existingAccount.getCustomer().setAddress(accountEntity.getCustomer().getAddress());
+            existingAccount.getCustomer().setPhoneNumber(accountEntity.getCustomer().getPhoneNumber());
             existingAccount.setIndividualAccount(accountEntity.isIndividualAccount());
             existingAccount.setAccountType(accountEntity.getAccountType());
             return accountRepository.save(existingAccount);
@@ -74,11 +78,20 @@ public class AccountService {
     }
 
     /**
-     * This method deletes an Account for the DB
+     * This method deletes an Account from the DB
+     * @param accountId The ID of the Account
      */
     public void deleteAccount(Long accountId) throws Exception {
         accountRepository.findById(accountId).orElseThrow(() -> new Exception("Account not found"));
-        accountRepository.deleteById(accountId);
+        accountRepository.deleteByAccountId(accountId);
+    }
+
+    /**
+     * This method deletes an Account from the DB
+     * @param email The email address of the customer
+     */
+    public void deleteAccountByEmail(String email) {
+        accountRepository.deleteByCustomerEmailAddress(email);
     }
 
     /**
@@ -105,15 +118,15 @@ public class AccountService {
      * @param accountEntity The Account to be validated
      */
     private void validate(AccountEntity accountEntity) throws Exception {
-        if (accountEntity.getAddress() == null) {
+        if (accountEntity.getCustomer().getAddress() == null) {
             throw new Exception("Address is missing");
-        } else if (accountEntity.getAddress().getAddressLine1() == null) {
+        } else if (accountEntity.getCustomer().getAddress().getAddressLine1() == null) {
             throw new Exception("Address Line 1 is missing");
-        } else if (accountEntity.getAddress().getCity() == null) {
+        } else if (accountEntity.getCustomer().getAddress().getCity() == null) {
             throw new Exception("City is missing");
-        } else if (accountEntity.getAddress().getState() == null) {
+        } else if (accountEntity.getCustomer().getAddress().getState() == null) {
             throw new Exception("State is missing");
-        } else if (accountEntity.getAddress().getPostalCode() == null) {
+        } else if (accountEntity.getCustomer().getAddress().getPostalCode() == null) {
             throw new Exception("Postal Code is missing");
         } else if (accountEntity.getAccountType() == null) {
             throw new Exception("Account Type is missing");

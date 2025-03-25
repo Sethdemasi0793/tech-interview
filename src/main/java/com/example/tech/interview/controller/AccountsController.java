@@ -39,5 +39,10 @@ public class AccountsController {
         accountService.deleteAccount(accountId);
     }
 
+    @GetMapping("/customers/{email}")
+    public void deleteAccountByEmail(String email) throws Exception {
+        accountService.deleteAccountByEmail(email);
+    }
+
 
 }
